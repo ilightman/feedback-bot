@@ -8,7 +8,7 @@ from aiogram.methods import SendMessage, PinChatMessage
 from aiogram.types import Message, InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-import texts
+import bot.texts as texts
 
 
 async def update_caption_or_text(message: Message) -> Message:
