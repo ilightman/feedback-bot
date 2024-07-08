@@ -3,6 +3,7 @@ import os
 import sys
 
 from aiogram import types, Dispatcher, Bot
+from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
@@ -13,7 +14,7 @@ from bot.users import users_router
 app = FastAPI(docs_url=None, redoc_url=None)
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 dp = Dispatcher()
-bot = Bot(BOT_TOKEN, parse_mode=ParseMode.HTML)
+bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 
 SECRET_TOKEN = os.getenv('SECRET_TOKEN')
