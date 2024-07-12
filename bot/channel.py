@@ -34,7 +34,7 @@ async def make_media_group(media_album: List[types.Message]) -> List[Union[types
 
 
 @channel_router.channel_post((F.chat.id == main_channel_id), F.media_group_id)
-@media_group_handler(receive_timeout=15.0)
+@media_group_handler
 async def album_handler(album_channel_post: List[types.Message]):
     """Обрабатывает только сообщения содержащие альбомы с несколькими медиа файлами"""
     new_media_group_list = await make_media_group(media_album=album_channel_post)
