@@ -5,16 +5,19 @@ import sys
 from aiogram import types, Dispatcher, Bot
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
+from aiogram.fsm.storage.memory import MemoryStorage
 from fastapi import FastAPI, Request, status
 from fastapi.responses import JSONResponse
 
 from bot.admin import admin_router
+from bot.channel import channel_router
 from bot.users import users_router
 
 app = FastAPI(docs_url=None, redoc_url=None)
 BOT_TOKEN = os.getenv('BOT_TOKEN')
-dp = Dispatcher()
 bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+storage = MemoryStorage()
+dp = Dispatcher(bot=bot, storage=storage)
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 
 SECRET_TOKEN = os.getenv('SECRET_TOKEN')
@@ -31,6 +34,7 @@ async def startup():
         await bot.set_webhook(
             url=WEBHOOK_URL
         )
+    dp.include_router(channel_router)
     dp.include_router(admin_router)
     dp.include_router(users_router)
 
