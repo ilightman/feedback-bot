@@ -5,8 +5,6 @@ from aiogram import Router, types, F
 from aiogram.enums import ContentType
 from aiogram_media_group import media_group_handler
 
-from main import storage
-
 channel_router = Router()
 main_channel_id = int(os.getenv('CHANNEL_CHAT_ID'))
 second_channel_id = int(os.getenv('SECOND_CHANNEL_ID'))
