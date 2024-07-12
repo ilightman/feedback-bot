@@ -1,7 +1,7 @@
-Spacefile
 venv
 .idea
 .env
 .space
 .spaceignore
+./Spacefile
 test_main.http
