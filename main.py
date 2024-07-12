@@ -19,7 +19,6 @@ bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTM
 storage = MemoryStorage()
 dp = Dispatcher(bot=bot, storage=storage)
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
-
 SECRET_TOKEN = os.getenv('SECRET_TOKEN')
 DETA_URL = os.getenv('DETA_URL')
 WEBHOOK_PATH = os.getenv('WEBHOOK_PATH')
