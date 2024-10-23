@@ -53,17 +53,6 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan, docs_url=None, redoc_url=None)
 app.add_middleware(HTTPSRedirectMiddleware)
 
-#@app.on_event('startup')
-#async def startup():
-#    webhook_info = await bot.get_webhook_info()
-#    if webhook_info.url != WEBHOOK_URL:
-#        await bot.set_webhook(
-#            url=WEBHOOK_URL
-#        )
-    # dp.include_router(channel_router)
-#    dp.include_router(admin_router)
-#    dp.include_router(users_router)
-
 
 @app.post(f'/{WEBHOOK_PATH}')
 async def bot_webhook(update: dict, request: Request):
@@ -75,11 +64,6 @@ async def bot_webhook(update: dict, request: Request):
     else:
         return JSONResponse(content={'detail': 'Not authorized, secret token header is not provided!'},
                             status_code=status.HTTP_401_UNAUTHORIZED)
-
-
-#@app.on_event('shutdown')
-#async def shutdown():
-#    await bot.session.close()
 
 
 @app.get('/docs')
