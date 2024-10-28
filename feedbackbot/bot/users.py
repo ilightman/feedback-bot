@@ -1,3 +1,5 @@
+from datetime import datetime
+import logging
 from aiogram import Router, F
 from aiogram.filters import CommandStart
 from aiogram.types import Message
@@ -10,7 +12,7 @@ from bot.config import ADMIN, DEVELOPER
 
 
 users_router = Router()
-
+logger = logging.getLogger(__name__)
 
 @users_router.message(CommandStart(), ChatTypeFilter(chat_type=["private"]))
 async def command_start_handler(message: Message) -> None:
@@ -26,7 +28,7 @@ async def content_in(message: Message) -> None:
     """Тут обрабатываем 'новость'"""
     try:
         await send_news_to_admin(message=message)
-        print(len(message.text))
+        logger.info(f"{datetime.now().isoformat()} len user message sent to bot {len(message.text)}")
         await message.answer(texts.ANSWER_TEXT)
     except Exception as e:
         await message.bot.send_message(chat_id=DEVELOPER, text=e)

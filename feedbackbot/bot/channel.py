@@ -13,6 +13,7 @@ from .config import (
     TEST_CHANNEL_2_CHAT_ID,
 )
 from .filters import ChannelsFilter
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 channel_router = Router()
@@ -21,9 +22,9 @@ channel_router = Router()
 async def make_media_group(messages: list[types.Message]) -> List:
     """Создает список InputMedia файлов"""
     media_list = []
-    logger.info(len(messages))
+    logger.info(f"{datetime.now().isoformat()} - общее количество всех сообщений - {len(messages)}")
     for message in messages:
-        logger.info(f"{message.message_id} message length-{len(message.html_text)}")
+        logger.info(f"{datetime.now().isoformat()} - {message.message_id} - message length (html text)- {len(message.html_text)}")
         if message.content_type == ContentType.PHOTO:
             media_list.append(
                 types.InputMediaPhoto(
@@ -37,17 +38,19 @@ async def make_media_group(messages: list[types.Message]) -> List:
                 )
             )
     if media_list:
-        logger.info("Media list is done")
+        logger.info(f"{datetime.now().isoformat()} media list is done")
+    else: 
+        logger.info(f"{datetime.now().isoformat()} media list is None")
     return media_list
 
 
 @channel_router.channel_post(ChannelsFilter() and MediaGroupFilter())  # , F.media_group_id)
-@media_group_handler(receive_timeout=5)
+@media_group_handler(receive_timeout=10)
 async def album_handler(messages: list[types.Message]):
     """Обрабатывает только сообщения содержащие альбомы с несколькими медиа файлами"""
     try:
+        logger.info(f"{datetime.now().isoformat()} - найдено сообщение из медиафайлов")
         media_list = await make_media_group(messages)
-        logger.info("media_list id done")
         # channel_id = SECOND_CHANNEL_ID if messages[0].chat.id == MAIN_CHANNEL_ID else TEST_CHANNEL_2_CHAT_ID
         channel_id = SECOND_CHANNEL_ID if os.getenv("DEBUG") == "False" else TEST_CHANNEL_2_CHAT_ID
         await messages[0].bot.send_media_group(chat_id=channel_id, media=media_list)
@@ -58,7 +61,7 @@ async def album_handler(messages: list[types.Message]):
 @channel_router.channel_post(ChannelsFilter())
 async def single_channel_post_handler(channel_post: types.Message):
     """Обрабатывает посты в канале с единичными видео или фото файлами"""
-    logger.info("single_message")
+    logger.info(f"{datetime.now().isoformat()} single_message")
     # channel_id = SECOND_CHANNEL_ID if messages[0].chat.id == MAIN_CHANNEL_ID else TEST_CHANNEL_2_CHAT_ID
     try:
         channel_id = (
