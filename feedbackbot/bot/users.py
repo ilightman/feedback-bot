@@ -20,7 +20,7 @@ async def command_start_handler(message: Message) -> None:
 
 
 @users_router.message(
-    F.from_user.id.in_(ADMINS),
+    # F.from_user.id.in_(ADMINS),
     F.content_type.in_({"text", "photo"}),
     ChatTypeFilter(chat_type=["private"]),
 )
